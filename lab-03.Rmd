@@ -44,10 +44,31 @@ Confirmed that after filtering for currently living, country-available, and indi
 
 ### Exercise 3
 
-Remove this text, and add your answer for Exercise 1 here.
-Add code chunks as needed.
-Don't forget to label your code chunk.
-Do not use spaces in code chunk labels.
+```{r further_limits}
+
+nobel_living <- nobel_living %>%
+  mutate(
+    country_us = if_else(country == "USA", "USA", "Other")
+  )
+
+nobel_living_science <- nobel_living %>%
+  filter(category %in% c("Physics", "Medicine", "Chemistry", "Economics"))
+
+library(ggplot2)
+
+ggplot(nobel_living_science, aes(x = country_us, fill = country_us)) +
+  geom_bar() +
+  facet_wrap(~ category, scales = "free_y") +
+  coord_flip() +
+  labs(title = "Nobel Prize Categories by Laureate's Country (USA vs Other)",
+       x = "Country",
+       y = "Count of Laureates",
+       fill = "Country") +
+  theme_minimal()
+
+```
+
+It appears that the buzzfeed article, remarkably, was accurate and that most Nobel Prize Laureates were in fact US-based when they won. 
 
 ### Exercise 4
 
