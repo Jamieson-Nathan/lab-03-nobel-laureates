@@ -1,7 +1,7 @@
 ---
 title: "Lab 03 - Nobel laureates"
-author: "Insert your name here"
-date: "Insert date here"
+author: "Jamieson Nathan"
+date: "5/2/2025"
 output: github_document
 ---
 
@@ -19,17 +19,28 @@ nobel <- read_csv("data/nobel.csv")
 
 ### Exercise 1
 
-Remove this text, and add your answer for Exercise 1 here.
-Add code chunks as needed.
-Don't forget to label your code chunk.
-Do not use spaces in code chunk labels.
+```{r first_look}
+
+dim(nobel)  # The first element is the number of rows and the second is the number of columns
+
+head(nobel) # descriptions of rows
+
+```
+There appear to be 935 rows and 26 columns. As we can see in the above tibble, the rows refer to each individual Nobel laureate, and the columns give specific information like their name, year they won, what category it was, etc. 
 
 ### Exercise 2
 
-Remove this text, and add your answer for Exercise 1 here.
-Add code chunks as needed.
-Don't forget to label your code chunk.
-Do not use spaces in code chunk labels.
+```{r filtering_the_data}
+
+library(dplyr)
+
+nobel_living <- nobel %>%
+  filter(is.na(died_date), !is.na(country), gender != "org")
+
+nrow(nobel_living)
+
+```
+Confirmed that after filtering for currently living, country-available, and individual (not organisation) lareates, there are 228 remaining entries. 
 
 ### Exercise 3
 
