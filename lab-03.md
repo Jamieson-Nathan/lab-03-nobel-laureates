@@ -96,12 +96,76 @@ most Nobel Prize Laureates were in fact US-based when they won.
 
 ### Exercise 4
 
-…
+``` r
+nobel_living <- nobel_living %>%
+  mutate(born_country_us = if_else(born_country == "USA", "USA", "Other"))
+
+nobel_living_science <- nobel_living %>%
+  filter(category %in% c("Physics", "Medicine", "Chemistry", "Economics")) %>%
+  mutate(born_country_us = if_else(born_country == "USA", "USA", "Other"))
+
+nobel_living %>% 
+  summarise(Count_US_Born = sum(born_country_us == "USA"))
+```
+
+    ## # A tibble: 1 × 1
+    ##   Count_US_Born
+    ##           <int>
+    ## 1           105
+
+By creating and summarizing this new variable, we find that 105 of the
+USA winners were born in the USA.
 
 ### Exercise 5
 
-…
+``` r
+ggplot(nobel_living_science, aes(x = country_us, fill = born_country_us)) +
+  geom_bar(position = "fill") +
+  facet_wrap(~ category, scales = "free_y") +
+  coord_flip() +
+  scale_fill_manual(values = c("USA" = "turquoise", "Other" = "gold")) +
+  labs(title = "Nobel Prize Categories by Laureate's Current and Birth Country",
+       x = "Country of Prize Win",
+       y = "Proportion of Laureates",
+       fill = "Birth Country") +
+  theme_minimal()
+```
+
+![](lab-03_files/figure-gfm/new_visual-1.png)<!-- --> Based on the new
+data visual, it appears that it is accurate to say that some (perhaps
+not ‘many’) of the US-Based winners were immigrants or born elsewhere.
 
 ### Exercise 6
 
-…
+``` r
+us_winners_foreign_born <- nobel_living %>%
+  filter(country_us == "USA" & born_country_us == "Other") %>%
+  count(born_country) %>%
+  arrange(desc(n))
+
+print(us_winners_foreign_born)
+```
+
+    ## # A tibble: 21 × 2
+    ##    born_country       n
+    ##    <chr>          <int>
+    ##  1 Germany            7
+    ##  2 United Kingdom     7
+    ##  3 China              5
+    ##  4 Canada             4
+    ##  5 Japan              3
+    ##  6 Australia          2
+    ##  7 Israel             2
+    ##  8 Norway             2
+    ##  9 Austria            1
+    ## 10 Finland            1
+    ## # ℹ 11 more rows
+
+The most common appear to be the UK and Germany.
+
+In general, I actually struggle to see the why they use this data to
+support anti-immigration sentiment, as this pretty categorically shows
+that US-Immigrant laureates are from other Developed nations, where the
+petition and executive order this article is drumming support against is
+targeted at developing, Muslim nations. Nonetheless, an interesting
+exercise!
